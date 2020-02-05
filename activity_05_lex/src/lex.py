@@ -80,9 +80,13 @@ def lex(input):
         return (input, None, None)
 
     # TODO: read letters
+    if charClass == CharClass.LETTER:
+        input, lexeme = addChar(input, lexeme)
+        return (input, lexeme, Token.IDENTIFIER)
 
 
     # TODO: read digits
+    if charClass == charClass.
 
 
     # TODO: read an operator
