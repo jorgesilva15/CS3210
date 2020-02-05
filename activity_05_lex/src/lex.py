@@ -86,13 +86,24 @@ def lex(input):
 
 
     # TODO: read digits
-    if charClass == charClass.
+    if charClass == CharClass.DIGIT:
+        input, lexeme = addChar(input, lexeme)
+        while True:
+            c, charClass = getChar(input)
+            if charClass == CharClass.DIGIT:
+                input, lexeme = addChar(input, lexeme)
+            else:
+                return (input, lexeme, Token.LITERAL)
 
 
     # TODO: read an operator
+    if charClass == CharClass.OPERATOR:
+        if lexemein lookup:
+            return (input, lexeme, lookup[lexeme])
 
 
     # TODO: anything else, raise an exception
+    raise Exception("Lexical Analyzer Error: unrecognized symbol found")
 
 # main
 if __name__ == "__main__":
