@@ -67,8 +67,8 @@ lookup = {
     "+"      : Token.ADD_OP,
     "-"      : Token.SUB_OP,
     "*"      : Token.MUL_OP,
-    "/"      : Token.DIV_OP
-    "("      : Token.OPEN_PAR
+    "/"      : Token.DIV_OP,
+    "("      : Token.OPEN_PAR,
     ")"      : Token.CLOSE_PAR
 }
 
@@ -111,8 +111,8 @@ def lex(input):
 
     #TODOd: read open/close parenthesis
     if charClass == CharClass.OTHER:
-        if c == '(' or c == ')'
-        input, lexeme = addChar(input, lexeme)
+        if c == '(' or c == ')':
+            input, lexeme = addChar(input, lexeme)
         return (input, lexeme, lookup[lexeme])
 
     # TODOd: anything else, raise an exception

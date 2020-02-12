@@ -165,8 +165,8 @@ def lex(input):
 # parse
 def parse(input):
 
-    # TODO: create the parse tree
-
+    # TODOd: create the parse tree
+    tree = Tree()
 
     # call parse expression
     parseExpression(input, tree)
@@ -179,22 +179,28 @@ def parse(input):
 # <expression'> -> epsilon
 def parseExpression(input, tree):
 
-    # TODO: update the tree's root with the label <expression>
+    # TODOd: update the tree's root with the label <expression>
+    tree.data = "<expression>"
 
 
-    # TODO: call parse a term
+    # TODOd: call parse a term
+    input, lexeme, token = parseTerm(input, tree)
 
 
     # parse more terms
     while True:
-        # TODO: if current token is + or - then add the lexeme to the tree and call parse term again
+        # TODOd: if current token is + or - then add the lexeme to the tree and call parse term again
+        if token == Token.ADDITION or token == Token.SUBTRACTION:
+            tree.add(lexeme)
+            input, lexeme, token = parseTerm(input, tree)
 
+        # TODOd: check for EOF
+        elif token == Token.EOF:
+            break
 
-        # TODO: check for EOF
-
-
-        # TODO: raise an exception
-
+        # TODOd: raise an exception
+        else:
+            raise Exception(errorMessage(6))
 
 
 # <term> -> <factor> <term’>
@@ -202,47 +208,56 @@ def parseExpression(input, tree):
 # <term'> -> epsilon
 def parseTerm(input, tree):
 
-    # TODO: create a subtree with the label <term>
+    # TODOd: create a subtree with the label <term>
+    subTree = Tree()
+    subTree.data = "<term>"
 
 
-    # TODO: attach the subtree as a child of tree
+    # TODOd: attach the subtree as a child of tree
+    tree.add(subTree)
 
-
-    # TODO: call parse a factor
-
+    # TODOd: call parse a factor
+    input, lexeme, token = parseFactor(input, subTree)
 
     # parse more factors
     while True:
-        # TODO: if current token is * or / then add the lexeme to the tree and call parse factor again
-
+        # TODOd: if current token is * or / then add the lexeme to the tree and call parse factor again
+        if token == Token.MULTIPLICATION or token == Token.DIVISION:
+            subTree.add(lexeme)
+            input, lexeme, token = parseFactor(input, subTree)
 
         # TODO: anything different than * or / then break the loop
+        else:
+            break
 
-
-    # TODO: return input, lexeme, token
-    return None
+    # TODOd: return input, lexeme, token
+    return input, lexeme, token
 
 # <factor> -> <identifier> | <literal>
 def parseFactor(input, tree):
 
-    # TODO: create a subtree with the label <factor>
+    # TODOd: create a subtree with the label <factor>
+    subTree = Tree()
+    subTree.data = "<factor>"
+
+    # TODOd: attach the subtree as a child of tree
+    tree.add(subTree)
+
+    # TODOd: read a token
+    input, lexeme, token = lex(input)
+
+    # TODOd: if token is an identifier or literal, add the lexeme as child of subTree and read the next token
+    if token == Token.IDENTIFIER or token == Token.LITERAL:
+        subTree.add(lexeme)
+        input, lexeme, token = lex(input)
+
+    # TODOd: anything different than identifier or literal, raise an exception
+    else:
+        raise Exception(errorMessage(11))
 
 
-    # TODO: attach the subtree as a child of tree
-
-
-    # TODO: read a token
-
-
-    # TODO: if token is an identifier or literal, add the lexeme as child of subTree and read the next token
-
-
-    # TODO: anything different than identifier or literal, raise an exception
-
-
-
-    # TODO: return input, lexeme, token
-    return None
+    # TODOd: return input, lexeme, token
+    return input,lexeme, token
 
 # main
 if __name__ == "__main__":
