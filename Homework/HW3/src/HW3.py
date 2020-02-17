@@ -26,10 +26,8 @@ def getChar(input):
         return (c, CharClass.DIGIT)
     if c == '"':
         return (c, CharClass.QUOTE)
-    if c in ['+', '-', '*', '/', '>', '=', '']:
+    if c in ['$']:
         return (c, CharClass.OPERATOR)
-    if c in ['.', ':', ',', ';']:
-        return (c, CharClass.PUNCTUATOR)
     if c in [' ', '\n', '\t']:
         return (c, CharClass.BLANK)
     return (c, CharClass.OTHER)
@@ -53,23 +51,29 @@ def addChar(input, lexeme):
 
 # all tokens
 class Token(Enum):
-    ADD_OP     = 1
-    SUB_OP     = 2
-    MUL_OP     = 3
-    DIV_OP     = 4
-    IDENTIFIER = 5
-    LITERAL    = 6
-    OPEN_PAR   = 7
-    CLOSE_PAR  = 8
+    DECLARE     = 1
+    IDENTIFIER     = 3
+    REAL     = 4
+    COMPLEX = 5
+    FIXED    = 6
+    FLOATING   = 7
+    SINGLE  = 8
+    DOUBLE = 9
+    BINARY = 10
+    DECIMAL = 11
 
 # lexeme to token conversion
 lookup = {
-    "+"      : Token.ADD_OP,
-    "-"      : Token.SUB_OP,
-    "*"      : Token.MUL_OP,
-    "/"      : Token.DIV_OP,
-    "("      : Token.OPEN_PAR,
-    ")"      : Token.CLOSE_PAR
+    "declare"      : Token.DECLARE,
+    "$"      : Token.IDENTIFIER,
+    "real"      : Token.REAL,
+    "fixed"      : Token.FIXED,
+    "complex"   : Token.COMPLEX,
+    "floating"      : Token.FLOATING,
+    "single"      : Token.SINGLE,
+    "double"    : Token.DOUBLE,
+    "binary"    : Token.BINARY,
+    "decimal"   : Token.DECIMAL
 }
 
 # returns the next (lexeme, token) pair or None if EOF is reached
@@ -83,40 +87,27 @@ def lex(input):
     if charClass == CharClass.EOF:
         return (input, None, None)
 
-    # TODOd: read a letter followed by letters or digits
+    # TODOd: read a $ followed by letters
+    if charClass == CharClass.OPERATOR:
+        input, lexeme = addChar(input, lexeme)
+        while True:
+            c, charClass = getChar(input)
+            if charClass == CharClass.LETTER:
+                input, lexeme = addChar(input, lexeme)
+            else:
+                return (input, lexeme, Token.IDENTIFIER)
+    #read a letter followed by letters
     if charClass == CharClass.LETTER:
         input, lexeme = addChar(input, lexeme)
         while True:
             c, charClass = getChar(input)
-            if charClass == CharClass.LETTER or charClass == CharClass.DIGIT:
+            if charClass == CharClass.LETTER:
                 input, lexeme = addChar(input, lexeme)
             else:
-                return (input, lexeme, Token.IDENTIFIER)
-
-    # TODOd: read digits
-    if charClass == CharClass.DIGIT:
-        input, lexeme = addChar(input, lexeme)
-        while True:
-            c, charClass = getChar(input)
-            if charClass == CharClass.DIGIT:
-                input, lexeme = addChar(input, lexeme)
-            else:
-                return (input, lexeme, Token.LITERAL)
-
-    # TODOd: read an operator
-    if charClass == CharClass.OPERATOR:
-        input, lexeme = addChar(input, lexeme)
-        if lexeme in lookup:
-            return (input, lexeme, lookup[lexeme])
-
-    #TODOd: read open/close parenthesis
-    if charClass == CharClass.OTHER:
-        if c == '(' or c == ')':
-            input, lexeme = addChar(input, lexeme)
-        return (input, lexeme, lookup[lexeme])
+                return (input, lexeme, lookup[lexeme])
 
     # TODOd: anything else, raise an exception
-    raise Exception("Lexical Analyzer Error: unrecognized symbol found!")
+                #raise Exception("Lexical Analyzer Error: unrecognized symbol found!")
 
 # main
 if __name__ == "__main__":
@@ -124,12 +115,15 @@ if __name__ == "__main__":
     # checks if source file was passed and if it exists
     if len(sys.argv) != 2:
         raise ValueError("Missing source file")
-    source = open(sys.argv[1], "rt")
-    if not source:
-        raise IOError("Couldn't open source file")
-    input = source.read()
-    source.close()
-    output = []
+    with open(sys.argv[1], "rt") as source:
+        if not source:
+            raise IOError("Couldn't open source file")
+        input = source.read()
+        if "$" in input:
+            output = []
+        else:
+            print("Lexical Analyzer Error: unrecognized symbol found!")
+            sys.exit(1)
 
     # main loop
     while True:
