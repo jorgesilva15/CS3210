@@ -109,11 +109,19 @@ def lex(input):
         if lexeme in lookup:
             return (input, lexeme, lookup[lexeme])
 
+<<<<<<< HEAD
     #TODOd: read open/close parenthesis
     if charClass == CharClass.OTHER:
         if c == '(' or c == ')':
             input, lexeme = addChar(input, lexeme)
         return (input, lexeme, lookup[lexeme])
+=======
+    # TODOd: read open/close parenthesis
+    if charClass == CharClass.OTHER:
+        if c == '(' or c == ')':
+            input, lexeme = addChar(input, lexeme)
+            return (input, lexeme, lookup[lexeme])
+>>>>>>> bbd1fe929473d67785b9c3027d0ff611be4357b6
 
     # TODOd: anything else, raise an exception
     raise Exception("Lexical Analyzer Error: unrecognized symbol found!")

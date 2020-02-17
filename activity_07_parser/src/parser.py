@@ -159,6 +159,12 @@ def lex(input):
         if lexeme in lookupToken:
             return (input, lexeme, lookupToken[lexeme])
 
+    # TODOd: read open/close parenthesis
+    if charClass == CharClass.DELIMITER:
+        if c == '(' or c == ')':
+            input, lexeme = addChar(input, lexeme)
+            return (input, lexeme, lookupToken[lexeme])
+
     # anything else, raises an error
     raise Exception(errorMessage(3))
 
@@ -181,11 +187,16 @@ def parseExpression(input, tree):
 
     # TODOd: update the tree's root with the label <expression>
     tree.data = "<expression>"
+<<<<<<< HEAD
 
 
     # TODOd: call parse a term
     input, lexeme, token = parseTerm(input, tree)
+=======
+>>>>>>> bbd1fe929473d67785b9c3027d0ff611be4357b6
 
+    # TODOd: call parse a term
+    input, lexeme, token = parseTerm(input, tree)
 
     # parse more terms
     while True:
@@ -202,6 +213,8 @@ def parseExpression(input, tree):
         else:
             raise Exception(errorMessage(6))
 
+    # TODO: return the parse tree
+    return tree
 
 # <term> -> <factor> <term’>
 # <term'> -> (*|/) <factor> <term'>
@@ -211,7 +224,10 @@ def parseTerm(input, tree):
     # TODOd: create a subtree with the label <term>
     subTree = Tree()
     subTree.data = "<term>"
+<<<<<<< HEAD
 
+=======
+>>>>>>> bbd1fe929473d67785b9c3027d0ff611be4357b6
 
     # TODOd: attach the subtree as a child of tree
     tree.add(subTree)
@@ -225,11 +241,19 @@ def parseTerm(input, tree):
         if token == Token.MULTIPLICATION or token == Token.DIVISION:
             subTree.add(lexeme)
             input, lexeme, token = parseFactor(input, subTree)
+<<<<<<< HEAD
 
         # TODO: anything different than * or / then break the loop
         else:
             break
 
+=======
+
+        # TODOd: anything different than * or / then break the loop
+        else:
+            break
+
+>>>>>>> bbd1fe929473d67785b9c3027d0ff611be4357b6
     # TODOd: return input, lexeme, token
     return input, lexeme, token
 
@@ -250,14 +274,24 @@ def parseFactor(input, tree):
     if token == Token.IDENTIFIER or token == Token.LITERAL:
         subTree.add(lexeme)
         input, lexeme, token = lex(input)
+<<<<<<< HEAD
+
+    # TODOd: anything different than identifier or literal, raise an exception
+    else:
+        raise Exception(errorMessage(11))
+=======
+>>>>>>> bbd1fe929473d67785b9c3027d0ff611be4357b6
 
     # TODOd: anything different than identifier or literal, raise an exception
     else:
         raise Exception(errorMessage(11))
 
-
     # TODOd: return input, lexeme, token
+<<<<<<< HEAD
     return input,lexeme, token
+=======
+    return input, lexeme, token
+>>>>>>> bbd1fe929473d67785b9c3027d0ff611be4357b6
 
 # main
 if __name__ == "__main__":
