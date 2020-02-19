@@ -113,28 +113,6 @@ lookupToken = {
     ")"         : Token.CLOSE_PAR
 }
 
-# a tree-like data structure
-class Tree:
-
-    TAB = "   "
-
-    def __init__(self):
-        self.data     = None
-        self.children = []
-
-    def add(self, child):
-        self.children.append(child)
-
-    def print(self, tab = ""):
-        if self.data != None:
-            print(tab + self.data)
-            tab += self.TAB
-            for child in self.children:
-                if isinstance(child, Tree):
-                    child.print(tab)
-                else:
-                    print(tab + child)
-
 # reads the next char from input and returns its class
 def getChar(input):
     if len(input) == 0:
@@ -289,11 +267,9 @@ def parse(input, grammar, actions, gotos):
     # TODOd: create a stack of trees
     trees = []
 
-
     # TODOd: initialize the stack of (state, symbol) pairs
     stack = []
     stack.append(0)
-
 
     # initialize lexeme and token variables
     lexeme = ""
@@ -309,7 +285,6 @@ def parse(input, grammar, actions, gotos):
         # TODOd: get current state
         state = stack[-1]
 
-
         # print debugging info
         if DEBUG:
             print("stack:",                    end = " ")
@@ -319,8 +294,7 @@ def parse(input, grammar, actions, gotos):
             print(" " + str(int(token)) + ")", end = " ")
 
         # TODOd: get action
-        action = actions[(state,token)]
-
+        action = actions[(state, token)]
 
         if DEBUG:
             print("action:",                   end = " ")
@@ -331,30 +305,27 @@ def parse(input, grammar, actions, gotos):
             errorCode = getErrorCode(state)
             raise Exception(errorMessage(errorCode))
 
-        # TODOd: implement the shift operation
-        # if action[0] == 's':
+        # TODO: implement the shift operation
+        if action[0] == 's':
 
             # TODOd: update the stack
             stack.append(int(token))
             state = int(action[1:])
             stack.append(state)
 
-
-
             # TODOd: create a new tree, set data to token, and push it onto the list of trees
             tree = Tree()
             tree.data = lexeme
             trees.append(tree)
 
-
             # set token to None to acknowledge reading the input
             token = None
 
-        # TODOd: implement the reduce operation
+        # TODO: implement the reduce operation
         elif action[0] == 'r':
 
             # TODOd: get production to use
-            production = grammar[int[action[1:]]]
+            production = grammar[int(action[1:])]
             lhs = getLHS(production)
             rhs = getRHS(production)
 
@@ -364,7 +335,6 @@ def parse(input, grammar, actions, gotos):
             state = stack[-1]
             stack.append(lhs)
             stack.append(int(gotos[(state, lhs)]))
-            
             # TODOd: create a new tree and set data to lhs
             newTree = Tree()
             newTree.data = lhs
@@ -380,21 +350,20 @@ def parse(input, grammar, actions, gotos):
             trees.append(newTree)
 
         # TODO: implement the "accept" operation
-        # else:
+        else:
 
-            # TODO: set lhs as the start symbol; assume that the lhs of the 1st production has the start symbol
+            # TODOd: set lhs as the start symbol; assume that the lhs of the 1st production has the start symbol
             production = grammar[0]
             lhs = getLHS(production)
 
-            # TODO: reduce all trees to the start symbol
+            # TODOd: reduce all trees to the start symbol
             newTree = Tree()
             newTree.data = lhs
             for tree in trees:
                 newTree.add(tree)
 
-            # TODO: return the new tree
-                return newTree
-
+            # TODOd: return the new tree
+            return newTree
 
 # main
 if __name__ == "__main__":
@@ -461,7 +430,7 @@ if __name__ == "__main__":
         print(ex)
         sys.exit(1)
 
-    #parse the code
+    # parse the code
     try:
         tree = parse(input, grammar, actions, gotos)
         print("Input is syntactically correct!")
