@@ -269,9 +269,9 @@ def parseFactor(input, tree):
 if __name__ == "__main__":
 
     # checks if source file was passed and if it exists
-    if len(sys.argv) != 2:
-        raise ValueError("Missing source file")
-    source = open(sys.argv[1], "rt")
+    #if len(sys.argv) != 2:
+    #    raise ValueError("Missing source file")
+    source = open("source1.exp")
     if not source:
         raise IOError("Couldn't open source file")
     input = source.read()
